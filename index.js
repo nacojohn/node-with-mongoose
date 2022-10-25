@@ -40,5 +40,37 @@ async function getCourses() {
     console.log(courses);
 }
 
+async function updateCourse(id) {
+    const course = await Course.findById(id);
+
+    if (!course) return;
+    course.isPublished = true;
+    course.author = 'Nnanna John';
+    const result = await course.save();
+    console.log(result);
+
+    // course.set({
+    //     isPublished: true,
+    //     author: 'Nnanna JOhn'
+    // });
+}
+
+async function updateCourse2(id) {
+    const result = await Course.updateOne({ _id: id }, {
+        $set: {
+            author: 'Naco',
+            isPublished: false
+        }
+    }, { new: true });
+    console.log(result);
+}
+
+async function removeCourse(id) {
+    const result = await Course.deleteOne({ _id: id });
+    // const course = await Course.findByIdAndDelete({ _id: id });
+    console.log(result);
+}
+
 // createCourse();
-getCourses();
+// getCourses();
+updateCourse2('635829c077dfee2eab14cd46')
