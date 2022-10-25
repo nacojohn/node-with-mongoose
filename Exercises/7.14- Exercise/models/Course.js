@@ -8,7 +8,8 @@ const courseSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    isPublished: Boolean
+    isPublished: Boolean,
+    price: Number
 });
 
 const Course = mongoose.model('Course', courseSchema);
