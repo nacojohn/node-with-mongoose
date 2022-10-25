@@ -7,7 +7,7 @@ mongoose.connect('mongodb://localhost:27017/mongo-exercises')
 
 async function getCourses() {
     const courses = await Course
-                                .find({ tags: { $in: ['backend'] } })
+                                .find({ isPublished: true, tags: 'backend' })
                                 .sort({ name: -1 })
                                 .select({ name: 1, author: 1 });
 
