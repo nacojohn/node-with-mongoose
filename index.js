@@ -34,9 +34,19 @@ async function getCourses() {
                                 // .find({ isPublished: true })
                                 // .find({ price: { $gte: 10 } })
                                 // .find({ price: { $in: [10, 20, 30] } })
-                                .find()
+                                // .find()
                                 // .or([ { isPublished: false, author: { $in: ['Nacojohn', 'Naco'] } }, { name: 'Angular Course' } ])
-                                .and([ { isPublished: true }, { name: 'Angular Course' } ])
+                                // .and([ { isPublished: true }, { name: 'Angular Course' } ])
+
+                                // using regular exp
+                                // starts with Naco
+                                .find({ author: /^Naco/ })
+
+                                // ends with Naco with case insensitivity
+                                .find({ author: /Naco$/i })
+
+                                // contains the word Naco
+                                .find({ author: /.*Naco.*/i })
                                 .limit(2)
                                 .sort({ name: -1 })
                                 .select({ name: 1, tags: 1 });
