@@ -33,7 +33,10 @@ async function getCourses() {
     const courses = await Course
                                 // .find({ isPublished: true })
                                 // .find({ price: { $gte: 10 } })
-                                .find({ price: { $in: [10, 20, 30] } })
+                                // .find({ price: { $in: [10, 20, 30] } })
+                                .find()
+                                // .or([ { isPublished: false, author: { $in: ['Nacojohn', 'Naco'] } }, { name: 'Angular Course' } ])
+                                .and([ { isPublished: true }, { name: 'Angular Course' } ])
                                 .limit(2)
                                 .sort({ name: -1 })
                                 .select({ name: 1, tags: 1 });
