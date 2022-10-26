@@ -5,28 +5,69 @@ mongoose.connect('mongodb://localhost:27017/test-db')
         .catch(errror => console.log(errror));
 
 const courseSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 255,
+        // match: /pattern/
+    },
+    category: {
+        type: String,
+        required: true,
+        enum: ['web', 'mobile', 'network']
+    },
     author: String,
-    tags: [ String ],
+    // tags: [ String ],
+    tags: {
+        type: Array,
+        validate: {
+            // validator: function (v) {
+            //     return v && v.length > 0;
+            // },
+            validator: (v) => {
+                const result = v && v.length > 0;
+                return Promise.resolve(result)
+            },
+            message: 'A course should have at least one tag'
+        }
+    },
     date: {
         type: Date,
         default: Date.now
     },
-    isPublished: Boolean
+    isPublished: {
+        type: Boolean
+    },
+    price: {
+        min: 5,
+        max: 200,
+        type: Number,
+        required: function () { return this.isPublished },
+        get: (v) => Math.round(v),
+        set: (v) => Math.round(v),
+    }
 });
 
 const Course = mongoose.model('Course', courseSchema);
 
 async function createCourse() {
-    const course = new Course({
-        name: 'Angular Course',
-        author: 'Nacojohn',
-        tags: ['javascript', 'angular'],
-        isPublished: true
-    });
-    
-    const result = await course.save();
-    console.log(result);
+    try {
+        const course = new Course({
+            name: 'Angular Course',
+            category: 'web',
+            author: 'Nacojohn',
+            tags: [],
+            isPublished: true,
+        });
+        
+        const result = await course.save();
+        console.log(result);
+    } catch (error) {
+        // console.log(error.errors);
+        for (let field in error.errors)
+            console.log(error.errors[field].message);
+    }
 }
 
 async function getCourses() {
@@ -71,6 +112,6 @@ async function removeCourse(id) {
     console.log(result);
 }
 
-// createCourse();
+createCourse();
 // getCourses();
-updateCourse2('635829c077dfee2eab14cd46')
+// updateCourse2('635829c077dfee2eab14cd46')
